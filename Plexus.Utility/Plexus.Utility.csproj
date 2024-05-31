@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Newtonsoft.Json" />
+    <None Remove="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
+    <None Remove="Proxy\" />
+    <None Remove="Proxy\src\" />
+    <None Remove="ServiceStack.Redis" />
+    <None Remove="ViewModel\" />
+    <None Remove="Extensions\" />
+    <None Remove="Exception\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.9" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2-beta1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.9" />
+    <PackageReference Include="ServiceStack.Redis" Version="6.6.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Proxy\" />
+    <Folder Include="Proxy\src\" />
+    <Folder Include="ViewModel\" />
+    <Folder Include="Extensions\" />
+    <Folder Include="Exception\" />
+  </ItemGroup>
+</Project>

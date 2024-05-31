@@ -1,0 +1,172 @@
+﻿#  Template .NET Core build
+
+#  This template allows you to validate your .NET Core package.
+#  The workflow allows running tests and code linting on the default branch.
+
+# To run your pipeline on a Windows machine, create a self-hosted Windows runner.
+# For instructions on setting up a Windows runner, see https://support.atlassian.com/bitbucket-cloud/docs/set-up-runners-for-windows/
+
+image: mcr.microsoft.com/dotnet/sdk:6.0
+
+definitions:
+    steps:
+        - step: &addStagingEnvironment
+            name: Add STG environment file
+            script:
+                - |
+                  cat <<EOF> ./Plexus.API/appsettings.Staging.json
+                      {
+                          "ConnectionStrings": {
+                            "DatabaseContext": "$DB_CONNECTION_STAGING"
+                          },
+                          "Blob": {
+                            "ConnectionString": "$BLOB_CONNECTION_STAGING",
+                            "ContainerName" : "$BLOB_CONTAINER_STAGING"
+                          },
+                          "JWT": {
+                            "ValidAudience": "$JWT_AUDIENCE_STAGING",
+                            "ValidIssuer": "$JWT_ISSUER_STAGING",
+                            "TokenExpiryMinute": "$JWT_TOKEN_EXPIRY_STAGING",
+                            "RefreshTokenExpiryMinute": "$JWT_REFRESH_EXPIRY_STAGING",
+                            "Secret": "$JWT_TOKEN_SECRET_STAGING",
+                            "RefreshTokenSecret": "$JWT_REFRESH_TOKEN_STAGING"
+                          }
+                      }
+                  EOF
+            artifacts:
+                - 'Plexus.API/appsettings.Staging.json'
+        - step: &addUATEnvironment
+            name: Add UAT environment file
+            script:
+                - |
+                  cat <<EOF> ./Plexus.API/appsettings.UAT.json
+                      {
+                          "ConnectionStrings": {
+                            "DatabaseContext": "$DB_CONNECTION_UAT"
+                          },
+                          "Blob": {
+                            "ConnectionString": "$BLOB_CONNECTION_UAT",
+                            "ContainerName" : "$BLOB_CONTAINER_UAT"
+                          },
+                          "JWT": {
+                            "ValidAudience": "$JWT_AUDIENCE_UAT",
+                            "ValidIssuer": "$JWT_ISSUER_UAT",
+                            "TokenExpiryMinute": "$JWT_TOKEN_EXPIRY_UAT",
+                            "RefreshTokenExpiryMinute": "$JWT_REFRESH_EXPIRY_UAT",
+                            "Secret": "$JWT_TOKEN_SECRET_UAT",
+                            "RefreshTokenSecret": "$JWT_REFRESH_TOKEN_UAT"
+                          }
+                      }
+                  EOF
+            artifacts:
+                - 'Plexus.API/appsettings.UAT.json'
+        - step: &addProductionEnvironment
+            name: Add PRD environment file
+            script:
+                - |
+                  cat <<EOF> ./Plexus.API/appsettings.Production.json
+                      {
+                          "ConnectionStrings": {
+                            "DatabaseContext": "$DB_CONNECTION_PRODUCTION"
+                          },
+                          "Blob": {
+                            "ConnectionString": "$BLOB_CONNECTION_PRODUCTION",
+                            "ContainerName" : "$BLOB_CONTAINER_PRODUCTION"
+                          },
+                          "JWT": {
+                            "ValidAudience": "$JWT_AUDIENCE_PRODUCTION",
+                            "ValidIssuer": "$JWT_ISSUER_PRODUCTION",
+                            "TokenExpiryMinute": "$JWT_TOKEN_EXPIRY_PRODUCTION",
+                            "RefreshTokenExpiryMinute": "$JWT_REFRESH_EXPIRY_PRODUCTION",
+                            "Secret": "$JWT_TOKEN_SECRET_PRODUCTION",
+                            "RefreshTokenSecret": "$JWT_REFRESH_TOKEN_PRODUCTION"
+                          }
+                      }
+                  EOF
+            artifacts:
+                - 'Plexus.API/appsettings.Production.json'
+        - step: &restoreAndPublish
+            name: Restore Buld And Publish
+            caches:
+                - dotnetcore
+            script:
+                - dotnet restore
+                - dotnet build --no-restore --configuration Release
+                - dotnet publish ./Plexus.API/Plexus.API.csproj  -c Release -o ./publish
+            artifacts:
+                - 'publish/**'
+        - step: &zip
+            name: Zip Publish Artifact
+            image: atlassian/default-image:4
+            script:
+                - cd ./publish
+                - zip -r api.zip .
+            artifacts:
+                - 'publish/api.zip'
+
+
+pipelines:
+    pull-requests:
+      '**':
+        - step:
+            name: Build
+            caches:
+              - dotnetcore
+            script:
+              - dotnet restore
+              - dotnet build --no-restore
+    branches:
+        '{develop}':
+            - step: *addStagingEnvironment
+            - step: *restoreAndPublish
+            - step: *zip
+            - step:
+                name: Deploy Azure App Service Staging
+                deployment: staging
+                script:
+                    - pipe: atlassian/azure-web-apps-deploy:1.1.1
+                      variables:
+                        AZURE_APP_ID: "$AZURE_APP_ID_STAGING"
+                        AZURE_PASSWORD: "$AZURE_PASSWORD_STAGING"
+                        AZURE_TENANT_ID: "$AZURE_TENANT_ID_STAGING"
+                        AZURE_RESOURCE_GROUP: "$AZURE_RESOURCE_GROUP_STAGING"
+                        AZURE_APP_NAME: "$AZURE_APP_NAME_STAGING"
+                        ZIP_FILE: 'publish/api.zip'
+                        DEBUG: 'true'
+
+        '{main}':
+            - step: *addProductionEnvironment
+            - step: *restoreAndPublish
+            - step: *zip
+            - step:
+                name: Deploy Azure App Service Production
+                deployment: production
+                script:
+                    - pipe: atlassian/azure-web-apps-deploy:1.1.1
+                      variables:
+                        AZURE_APP_ID: "$AZURE_APP_ID_PRODUCTION"
+                        AZURE_PASSWORD: "$AZURE_PASSWORD_PRODUCTION"
+                        AZURE_TENANT_ID: "$AZURE_TENANT_ID_PRODUCTION"
+                        AZURE_RESOURCE_GROUP: "$AZURE_RESOURCE_GROUP_PRODUCTION"
+                        AZURE_APP_NAME: "$AZURE_APP_NAME_PRODUCTION"
+                        ZIP_FILE: 'publish/api.zip'
+                        DEBUG: 'true'
+
+    custom:
+        '{uat}':
+            - step: *addUATEnvironment
+            - step: *restoreAndPublish
+            - step: *zip
+            - step:
+                name: Deploy Azure App Service UAT
+                deployment: UAT
+                script:
+                    - pipe: atlassian/azure-web-apps-deploy:1.1.1
+                      variables:
+                        AZURE_APP_ID: "$AZURE_APP_ID_UAT"
+                        AZURE_PASSWORD: "$AZURE_PASSWORD_UAT"
+                        AZURE_TENANT_ID: "$AZURE_TENANT_ID_UAT"
+                        AZURE_RESOURCE_GROUP: "$AZURE_RESOURCE_GROUP_UAT"
+                        AZURE_APP_NAME: "$AZURE_APP_NAME_UAT"
+                        ZIP_FILE: 'publish/api.zip'
+                        DEBUG: 'true'

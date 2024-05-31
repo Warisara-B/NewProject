@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Plexus.Utility\Plexus.Utility.csproj" />
+    <ProjectReference Include="..\Plexus.Integration\Plexus.Integration.csproj" />
+    <ProjectReference Include="..\Plexus.Entity\Plexus.Entity.csproj" />
+    <ProjectReference Include="..\Plexus.Database\Plexus.Database.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="src\" />
+    <None Remove="src\Academic\" />
+    <None Remove="ViewModel\" />
+    <None Remove="ViewModel\Academic\" />
+    <None Remove="ViewModel\Registration\" />
+    <None Remove="src\Registration\" />
+    <None Remove="ViewModel\Academic\Section\" />
+    <None Remove="src\Academic\Section\" />
+    <None Remove="Config\" />
+    <None Remove="Exception\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\" />
+    <Folder Include="src\Academic\" />
+    <Folder Include="ViewModel\" />
+    <Folder Include="ViewModel\Academic\" />
+    <Folder Include="ViewModel\Registration\" />
+    <Folder Include="src\Registration\" />
+    <Folder Include="ViewModel\Academic\Section\" />
+    <Folder Include="src\Academic\Section\" />
+    <Folder Include="Config\" />
+    <Folder Include="Exception\" />
+  </ItemGroup>
+</Project>

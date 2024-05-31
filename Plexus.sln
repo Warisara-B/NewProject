@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plexus.Entity", "Plexus.Entity\Plexus.Entity.csproj", "{BBDD721C-7A1D-46B0-8D6E-42CDB5E91EA9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plexus.API", "Plexus.API\Plexus.API.csproj", "{37AE1549-C4FD-41C1-BE20-72F3F2823D12}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plexus.Client", "Plexus.Client\Plexus.Client.csproj", "{FF18C542-AA82-40F7-A3E1-4D265A5CB69D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plexus.Utility", "Plexus.Utility\Plexus.Utility.csproj", "{A5FEB80F-2F93-4E1B-BDF4-94409C205CC1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plexus.Database", "Plexus.Database\Plexus.Database.csproj", "{AE119E06-F12A-48B3-BD11-79050FA74FB4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plexus.Integration", "Plexus.Integration\Plexus.Integration.csproj", "{D281FE48-0A94-4BEE-89FF-4D440DA3DB10}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plexus.Service", "Plexus.Service\Plexus.Service.csproj", "{A5641633-279F-470C-A7D9-69919B131FD6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BBDD721C-7A1D-46B0-8D6E-42CDB5E91EA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBDD721C-7A1D-46B0-8D6E-42CDB5E91EA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBDD721C-7A1D-46B0-8D6E-42CDB5E91EA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBDD721C-7A1D-46B0-8D6E-42CDB5E91EA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37AE1549-C4FD-41C1-BE20-72F3F2823D12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37AE1549-C4FD-41C1-BE20-72F3F2823D12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37AE1549-C4FD-41C1-BE20-72F3F2823D12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37AE1549-C4FD-41C1-BE20-72F3F2823D12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF18C542-AA82-40F7-A3E1-4D265A5CB69D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF18C542-AA82-40F7-A3E1-4D265A5CB69D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF18C542-AA82-40F7-A3E1-4D265A5CB69D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF18C542-AA82-40F7-A3E1-4D265A5CB69D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5FEB80F-2F93-4E1B-BDF4-94409C205CC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5FEB80F-2F93-4E1B-BDF4-94409C205CC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5FEB80F-2F93-4E1B-BDF4-94409C205CC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5FEB80F-2F93-4E1B-BDF4-94409C205CC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE119E06-F12A-48B3-BD11-79050FA74FB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE119E06-F12A-48B3-BD11-79050FA74FB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE119E06-F12A-48B3-BD11-79050FA74FB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE119E06-F12A-48B3-BD11-79050FA74FB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D281FE48-0A94-4BEE-89FF-4D440DA3DB10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D281FE48-0A94-4BEE-89FF-4D440DA3DB10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D281FE48-0A94-4BEE-89FF-4D440DA3DB10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D281FE48-0A94-4BEE-89FF-4D440DA3DB10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5641633-279F-470C-A7D9-69919B131FD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5641633-279F-470C-A7D9-69919B131FD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5641633-279F-470C-A7D9-69919B131FD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5641633-279F-470C-A7D9-69919B131FD6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3B5B251C-3C2B-4A9F-AB9C-631FCC1A1F34}
+	EndGlobalSection
+EndGlobal

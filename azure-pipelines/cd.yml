@@ -1,0 +1,82 @@
+# Docker
+# Build and push an image to Azure Container Registry
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+- develop
+
+resources:
+- repo: self
+
+variables:
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
+  buildConfiguration: 'release'
+
+stages:
+- stage: Build
+  displayName: Build and create artifact
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+
+    - task: UseDotNet@2
+      inputs:
+        packageType: 'sdk'
+        version: '6.x'
+
+
+    - task: CmdLine@2
+      displayName: Add appsettings.Staging.json
+      inputs:
+        script: |
+          cat > Plexus.API/appsettings.Staging.json << EOF
+          {
+            "ConnectionStrings": {
+              "DatabaseContext": "$(DB_CONNECTION_STG)"
+            },
+            "Blob": {
+              "ConnectionString": "$(BLOB_CONNECTION_STG)",
+              "ContainerName": "$(BLOB_CONTAINER_NAME_STG)"
+            }
+          }
+          EOF
+
+    - task: CmdLine@2
+      displayName: Add appsettings.Production.json
+      inputs:
+        script: |
+          cat > Plexus.API/appsettings.Production.json << EOF
+          {
+            "ConnectionStrings": {
+              "DatabaseContext": "$(DB_CONNECTION_PRD)"
+            },
+            "Blob": {
+              "ConnectionString": "$(BLOB_CONNECTION_PRD)",
+              "ContainerName": "$(BLOB_CONTAINER_NAME_PRD)"
+            }
+          }
+          EOF
+
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'restore'
+        projects: 'Plexus.sln'
+        feedsToUse: 'select'
+        noCache: true
+
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'publish'
+        publishWebProjects: false
+        projects: 'Plexus.API/Plexus.API.csproj'
+        arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'

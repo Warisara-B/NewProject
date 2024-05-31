@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="Provider\" />
+		<None Remove="DTO\" />
+		<None Remove="Provider\src\" />
+		<None Remove="DTO\Student\" />
+		<None Remove="Exception\" />
+		<None Remove="DTO\Payment\" />
+		<None Remove="DTO\Academic\" />
+		<None Remove="DTO\Registration\" />
+		<None Remove="DTO\Academic\Curriculum\" />
+		<None Remove="Provider\src\Registration\" />
+		<None Remove="Provider\src\Academic\" />
+		<None Remove="Provider\src\Payment\" />
+		<None Remove="Provider\src\Academic\Curriculum\" />
+		<None Remove="DTO\Academic\Section\" />
+		<None Remove="Provider\src\Academic\Section\" />
+	</ItemGroup>
+	<ItemGroup>
+		<Folder Include="DTO\Student\" />
+		<Folder Include="Exception\" />
+		<Folder Include="DTO\Payment\" />
+		<Folder Include="DTO\Registration\" />
+		<Folder Include="DTO\Academic\Curriculum\" />
+		<Folder Include="Provider\src\Registration\" />
+		<Folder Include="Provider\src\Payment\" />
+		<Folder Include="Provider\src\Academic\Curriculum\" />
+		<Folder Include="DTO\Academic\Section\" />
+		<Folder Include="Provider\src\Academic\Section\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="EPPlus" Version="7.1.2" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Plexus.Database\Plexus.Database.csproj" />
+		<ProjectReference Include="..\Plexus.Utility\Plexus.Utility.csproj" />
+	</ItemGroup>
+</Project>

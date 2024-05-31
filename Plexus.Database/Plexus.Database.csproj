@@ -1,0 +1,75 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Microsoft.EntityFrameworkCore" />
+    <None Remove="Microsoft.EntityFrameworkCore.Design" />
+    <None Remove="Microsoft.EntityFrameworkCore.SqlServer" />
+    <None Remove="Model\" />
+    <None Remove="Enum\" />
+    <None Remove="Model\Academic\" />
+    <None Remove="Model\Academic\Curriculum\" />
+    <None Remove="Model\Academic\Section\" />
+    <None Remove="Model\Academic\PreRequisite\" />
+    <None Remove="Model\Registration\" />
+    <None Remove="Model\Academic\Faculty\" />
+    <None Remove="Model\Payment\" />
+    <None Remove="Enum\Student\" />
+    <None Remove="Enum\Registration\" />
+    <None Remove="Enum\Payment\" />
+    <None Remove="Enum\Academic\" />
+    <None Remove="Enum\Academic\Curriculum\" />
+    <None Remove="Model\Localization\" />
+    <None Remove="Model\Localization\Academic\" />
+    <None Remove="Model\Localization\Academic\Faculty\" />
+    <None Remove="Model\Localization\Facility\" />
+    <None Remove="Model\Localization\Academic\Curriculum\" />
+    <None Remove="Enum\Payment\Scholarship\" />
+    <None Remove="Enum\Academic\Section\" />
+    <None Remove="Model\Announcement\" />
+    <None Remove="Model\Localization\Announcement\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="6.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.9">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.9" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Model\" />
+    <Folder Include="Enum\" />
+    <Folder Include="Model\Academic\" />
+    <Folder Include="Model\Academic\Curriculum\" />
+    <Folder Include="Model\Academic\Section\" />
+    <Folder Include="Model\Academic\Requisite\" />
+    <Folder Include="Model\Registration\" />
+    <Folder Include="Model\Academic\Faculty\" />
+    <Folder Include="Model\Payment\" />
+    <Folder Include="Enum\Student\" />
+    <Folder Include="Enum\Registration\" />
+    <Folder Include="Enum\Payment\" />
+    <Folder Include="Enum\Academic\" />
+    <Folder Include="Enum\Academic\Curriculum\" />
+    <Folder Include="Model\Localization\" />
+    <Folder Include="Model\Localization\Academic\" />
+    <Folder Include="Model\Localization\Academic\Faculty\" />
+    <Folder Include="Model\Localization\Facility\" />
+    <Folder Include="Model\Localization\Academic\Curriculum\" />
+    <Folder Include="Enum\Payment\Scholarship\" />
+    <Folder Include="Enum\Academic\Section\" />
+    <Folder Include="Model\Announcement\" />
+    <Folder Include="Model\Localization\Announcement\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\.editorconfig" />
+  </ItemGroup>
+</Project>
