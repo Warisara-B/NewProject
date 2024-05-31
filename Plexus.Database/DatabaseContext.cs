@@ -300,8 +300,8 @@ namespace Plexus.Database
             if (!optionsBuilder.IsConfigured)
             {
                 // IF NOT GIVEN CONFIGURATION SET TO LOCAL DB
-                optionsBuilder.UseSqlServer("Server=OS_NARUEDON;Initial Catalog=develop;Integrated Security=True;");
-                //optionsBuilder.UseSqlServer("Server=tcp:localhost,1433;Initial Catalog=Plexus;Persist Security Info=False;User ID=sa;Password=reallyStrongPwd123;");
+                //optionsBuilder.UseSqlServer("Server=OS_NARUEDON;Initial Catalog=develop;Integrated Security=True;");
+                optionsBuilder.UseSqlServer("Server=mssql-174339-0.cloudclusters.net,10022;Initial Catalog=develop;Persist Security Info=False;User ID=plexus;Password=1q2w3e4r#Q;");
             }
         }
 
