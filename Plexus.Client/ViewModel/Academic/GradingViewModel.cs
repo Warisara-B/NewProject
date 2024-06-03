@@ -62,4 +62,12 @@ namespace Plexus.Client.ViewModel.Academic
         [JsonProperty("updatedAt")]
         public DateTime updatedAt { get; set; }
     }
+    
+    public class CreateTotalScoreViewModel
+    {
+
+        [JsonProperty("totalScore")]
+        public decimal totalScore { get; set; }
+    }
+
 }

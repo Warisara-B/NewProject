@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Data;
+using System.Diagnostics;
+using System.Drawing;
 using Azure;
 using Azure.Core;
 using Microsoft.AspNetCore.Http;
@@ -8,6 +10,7 @@ using Newtonsoft.Json;
 using OfficeOpenXml;
 using Plexus.Client.ViewModel.Academic;
 using Plexus.Client.ViewModel.DropDown;
+using Plexus.Database.Model;
 using Plexus.Database.Model.Academic;
 using Plexus.Entity.DTO;
 using Plexus.Entity.DTO.Academic;
@@ -160,10 +163,10 @@ namespace Plexus.Client.src.Academic
         }
 
 
-        public List<GradingViewModel> NewGrading(List<CreateGradingViewModel> dtoList, int format, string interval, string grades, string maxScore, string minScore,Guid userId)
+        public List<GradingViewModel> NewGrading(List<CreateGradingViewModel> dtoList, int format, string interval, string grades, string maxScore, string minScore, string rangeGrade, string median, string llf, Guid userId)
         {
             var responseList = new List<GradingViewModel>();
-            var NewdtoList = new List<CreateGradingDTO>();
+            var NewdtoList = new List<CreateGradingDTO>();         
             foreach (var data in dtoList)
             {
                 var dto = new CreateGradingDTO
@@ -180,7 +183,7 @@ namespace Plexus.Client.src.Academic
                 NewdtoList.Add(dto);
             }
 
-            var gradingResults = _gradingProvider.NewGrading(NewdtoList, format, interval, grades, maxScore,minScore);
+            var gradingResults = _gradingProvider.NewGrading(NewdtoList, format, interval, grades, maxScore,minScore, rangeGrade, median, llf);
             responseList = MapDTOToViewModel(gradingResults);
             return responseList;
         }
@@ -205,6 +208,7 @@ namespace Plexus.Client.src.Academic
                 gradingThresholds = dto.gradingThresholds
             }).ToList();
         }
+        
     }
 
 }

@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using Plexus.Database.Model.Registration;
+using ServiceStack.Web;
 
 namespace Plexus.Entity.Provider.src.Academic
 {
@@ -86,10 +87,11 @@ namespace Plexus.Entity.Provider.src.Academic
             return newlist;
         }
 
-        public List<GradingDTO> NewGrading(List<CreateGradingDTO> request, int format, string interval, string grades, string maxScore, string minScore)
+        public List<GradingDTO> NewGrading(List<CreateGradingDTO> request, int format, string interval, string grades, string maxScore, string minScore, string rangeGrade, string median, string llf)
         {
             List<GradingDTO> newlist = new List<GradingDTO>();
             var gradingThresholds = new GradingThresholds();
+
             newlist = request.Select(dto =>
             {
                 var mitdtermScore = Convert.ToDecimal((Convert.ToDouble(dto.mitdtermExam) + Convert.ToDouble(dto.mitdtermReport)) / 110 * 40);
@@ -100,9 +102,17 @@ namespace Plexus.Entity.Provider.src.Academic
                 {
                     thresholds = CalculateThresholds(Convert.ToDecimal(interval), grades, Convert.ToDecimal(maxScore));
                 }
+                else if (format == 2)
+                {
+                    thresholds = CalculateThresholds(Convert.ToDecimal(interval), grades, Convert.ToDecimal(maxScore), Convert.ToDecimal(rangeGrade));
+                }
                 else if (format == 3)
                 {
                     thresholds = CalculateThresholds(50, grades);
+                }
+                else if (format == 4)
+                {
+                    thresholds = CalculateThresholds(Convert.ToDecimal(interval), grades, Convert.ToDecimal(maxScore), Convert.ToDecimal(rangeGrade), Convert.ToDecimal(median), Convert.ToDecimal(llf));
                 }
                 else if (format == 5)
                 {
@@ -371,7 +381,180 @@ namespace Plexus.Entity.Provider.src.Academic
             return gradingThresholds;
         }
 
+        public GradingThresholds CalculateThresholds(decimal interval, string grades, decimal maxScore, decimal rangeGrade)
+        {
+            var gradingThresholds = new GradingThresholds();
+            // กำหนดค่าเริ่มต้นและค่าจบ
+            decimal start = 0;
+            decimal end = maxScore;
+            // คำนวณช่วงระหว่างค่าทั้งสอง
+            decimal delta = end - start;
+            // แบ่งช่วงตามจำนวนเกรดที่เลือก
+            string[] gradesArr = grades.Split(',');
+            int gradeCount = gradesArr.Length;
+            // คำนวณและแสดงค่าของแต่ละจุด
+            var gradeValues = new Dictionary<string, decimal>();
+            //คำนวณปรับความก้างของช่วงเกรด
+            interval = interval * rangeGrade;
 
+            for (int i = 0; i < gradeCount; i++)
+            {
+                gradeValues[gradesArr[i].Trim()] = Math.Round(end - i * interval, 2);
+            }
+
+            // ตั้งค่าเริ่มต้นทั้งหมดเป็น 0 โดยใช้ Reflection
+            foreach (var prop in typeof(GradingThresholds).GetProperties())
+            {
+                prop.SetValue(gradingThresholds, 0m);
+            }
+            // ตั้งค่าเกรดใน gradingThresholds
+            foreach (var grade in gradesArr)
+            {
+                switch (grade.Trim())
+                {
+                    case "A":
+                        gradingThresholds.A = gradeValues["A"];
+                        break;
+                    case "BPlus":
+                        gradingThresholds.BPlus = gradeValues["BPlus"];
+                        break;
+                    case "B":
+                        gradingThresholds.B = gradeValues["B"];
+                        break;
+                    case "CPlus":
+                        gradingThresholds.CPlus = gradeValues["CPlus"];
+                        break;
+                    case "C":
+                        gradingThresholds.C = gradeValues["C"];
+                        break;
+                    case "DPlus":
+                        gradingThresholds.DPlus = gradeValues["DPlus"];
+                        break;
+                    case "D":
+                        gradingThresholds.D = gradeValues["D"];
+                        break;
+
+                    default:
+                        // เกรดที่ไม่ถูกต้องจะไม่ถูกกำหนดค่าใด ๆ
+                        break;
+                }
+            }
+
+            // ตัดเกรดที่ไม่ได้ถูกกำหนดค่าออกไป
+            if (!gradesArr.Contains("A")) gradingThresholds.A = 0;
+            if (!gradesArr.Contains("BPlus")) gradingThresholds.BPlus = 0;
+            if (!gradesArr.Contains("B")) gradingThresholds.B = 0;
+            if (!gradesArr.Contains("CPlus")) gradingThresholds.CPlus = 0;
+            if (!gradesArr.Contains("C")) gradingThresholds.C = 0;
+            if (!gradesArr.Contains("DPlus")) gradingThresholds.DPlus = 0;
+            if (!gradesArr.Contains("D")) gradingThresholds.D = 0;
+
+
+            return gradingThresholds;
+        }
+
+        public GradingThresholds CalculateThresholds(decimal interval, string grades, decimal maxScore, decimal rangeGrade, decimal median, decimal llf)
+        {
+            var gradingThresholds = new GradingThresholds();
+            // กำหนดค่าเริ่มต้นและค่าจบ
+            decimal start = 0;
+            decimal end = maxScore;
+            // คำนวณช่วงระหว่างค่าทั้งสอง
+            decimal delta = end - start;
+            // แบ่งช่วงตามจำนวนเกรดที่เลือก
+            string[] gradesArr = grades.Split(',');
+            int gradeCount = gradesArr.Length;
+            // คำนวณและแสดงค่าของแต่ละจุด
+            var gradeValues = new Dictionary<string, decimal>();
+            //คำนวณปรับความก้างของช่วงเกรด
+            interval = interval * rangeGrade;
+            decimal cruScore = 0;
+
+            // ตั้งค่าเริ่มต้นทั้งหมดเป็น 0 โดยใช้ Reflection
+            foreach (var prop in typeof(GradingThresholds).GetProperties())
+            {
+                prop.SetValue(gradingThresholds, 0m);
+            }
+            // ตั้งค่าเกรดใน gradingThresholds
+            if (gradeCount == 5)
+            {
+                for (int i = 0; i < gradeCount; i++)
+                {
+                    if (i == 0)
+                    {
+                        gradeValues[gradesArr[i].Trim()] = Math.Round(median + (interval * llf), 2);
+                        cruScore = Math.Round(median + (interval * llf), 2);
+                    }
+                    else
+                    {
+                        gradeValues[gradesArr[i].Trim()] = Math.Round(cruScore - interval, 2);
+                        cruScore = Math.Round(cruScore - interval, 2);
+                    }
+                }
+            }
+            else if (gradeCount == 8)
+            {
+                for (int i = 0; i < gradeCount; i++)
+                {
+                    if (i == 0)
+                    {
+                        gradeValues[gradesArr[i].Trim()] = Math.Round(median + (interval * llf), 2);
+                        cruScore = Math.Round(median + (interval * llf), 2);
+                    }
+                    else
+                    {
+                        gradeValues[gradesArr[i].Trim()] = Math.Round(cruScore - (interval / 2), 2);
+                        cruScore = Math.Round(cruScore - (interval / 2), 2);
+                    }
+                }
+            }
+            else
+            {
+                throw new GradeException.IncorrectGrade();
+            }
+
+            foreach (var grade in gradesArr)
+            {
+                switch (grade.Trim())
+                {
+                    case "A":
+                        gradingThresholds.A = gradeValues["A"];
+                        break;
+                    case "BPlus":
+                        gradingThresholds.BPlus = gradeValues["BPlus"];
+                        break;
+                    case "B":
+                        gradingThresholds.B = gradeValues["B"];
+                        break;
+                    case "CPlus":
+                        gradingThresholds.CPlus = gradeValues["CPlus"];
+                        break;
+                    case "C":
+                        gradingThresholds.C = gradeValues["C"];
+                        break;
+                    case "DPlus":
+                        gradingThresholds.DPlus = gradeValues["DPlus"];
+                        break;
+                    case "D":
+                        gradingThresholds.D = gradeValues["D"];
+                        break;
+
+                    default:
+                        // เกรดที่ไม่ถูกต้องจะไม่ถูกกำหนดค่าใด ๆ
+                        break;
+                }
+            }
+            // ตัดเกรดที่ไม่ได้ถูกกำหนดค่าออกไป
+            if (!gradesArr.Contains("A")) gradingThresholds.A = 0;
+            if (!gradesArr.Contains("BPlus")) gradingThresholds.BPlus = 0;
+            if (!gradesArr.Contains("B")) gradingThresholds.B = 0;
+            if (!gradesArr.Contains("CPlus")) gradingThresholds.CPlus = 0;
+            if (!gradesArr.Contains("C")) gradingThresholds.C = 0;
+            if (!gradesArr.Contains("DPlus")) gradingThresholds.DPlus = 0;
+            if (!gradesArr.Contains("D")) gradingThresholds.D = 0;
+
+            return gradingThresholds;
+        }
         //public GradingThresholds CalculateThresholds(decimal interval, string grades,decimal maxScore)
         //{
         //    var gradingThresholds = new GradingThresholds();
@@ -466,6 +649,6 @@ namespace Plexus.Entity.Provider.src.Academic
             var response = new List<GradingDTO>();
             return response;
         }
-
+        
     }
 }

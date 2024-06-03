@@ -17,7 +17,7 @@ namespace Plexus.Client
 
         List<GradingViewModel> Grading(List<CreateGradingViewModel> dtoList, string activity, string adjustmentValue, string grade,Guid userId);
 
-        List<GradingViewModel> NewGrading(List<CreateGradingViewModel> dtoList,int format, string interval, string grades, string maxScore, string minScore, Guid userId);
+        List<GradingViewModel> NewGrading(List<CreateGradingViewModel> dtoList,int format, string interval, string grades, string maxScore, string minScore, string rangeGrade, string median, string llf, Guid userId);
 
     }
 }

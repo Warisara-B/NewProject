@@ -11,7 +11,7 @@ namespace Plexus.Entity.Provider
     {
         List<GradingDTO> ImportScore(List<CreateGradingDTO> file, string requester);
         List<GradingDTO> Grading(List<CreateGradingDTO> request, string activity, string adjustmentValue, string grade);
-        List<GradingDTO> NewGrading(List<CreateGradingDTO> request, int format, string interval, string grades, string maxScore, string minScore);
+        List<GradingDTO> NewGrading(List<CreateGradingDTO> request, int format, string interval, string grades, string maxScore, string minScore, string rangeGrade, string median, string llf);
         IEnumerable<GradingDTO> GetByStudentCode(string studentCode);
     }
 }

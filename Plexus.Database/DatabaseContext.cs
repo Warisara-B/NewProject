@@ -297,11 +297,11 @@ namespace Plexus.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
+            if (optionsBuilder.IsConfigured)
             {
                 // IF NOT GIVEN CONFIGURATION SET TO LOCAL DB
                 //optionsBuilder.UseSqlServer("Server=OS_NARUEDON;Initial Catalog=develop;Integrated Security=True;");
-                optionsBuilder.UseSqlServer("Server=mssql-174339-0.cloudclusters.net,10022;Initial Catalog=develop;Persist Security Info=False;User ID=plexus;Password=1q2w3e4r#Q;");
+                optionsBuilder.UseSqlServer("Server=mssql-174339-0.cloudclusters.net,10022;Initial Catalog=develop;Persist Security Info=False;User ID=plexus;Password=1q2w3e4r#Q;TrustServerCertificate=True;");
             }
         }
 

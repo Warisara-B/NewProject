@@ -25,7 +25,6 @@ namespace Plexus.Entity.DTO.Academic
         public string grade { get; set; }
         public string color { get; set; }
         public GradingThresholds gradingThresholds { get; set; }
-
     }
     public class GradingThresholds
     {
@@ -116,5 +115,4 @@ namespace Plexus.Entity.DTO.Academic
         public DateTime createdAt { get; set; }
         public DateTime updatedAt { get; set; }
     }
-
 }

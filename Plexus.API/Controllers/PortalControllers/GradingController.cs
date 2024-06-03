@@ -4,7 +4,9 @@ using Azure.Core;
 using Microsoft.AspNetCore.Mvc;
 using Plexus.Client;
 using Plexus.Client.src.Academic;
+using Plexus.Client.src.Payment;
 using Plexus.Client.ViewModel.Academic;
+using Plexus.Client.ViewModel.Payment;
 using Plexus.Database.Model.Academic;
 using Plexus.Entity.DTO;
 using Plexus.Entity.DTO.Academic;
@@ -56,7 +58,7 @@ namespace Plexus.API.Controllers.PortalControllers
         //}
 
         [HttpPost]
-        public IActionResult NewGrading([FromBody] List<CreateGradingDTO> request, int format, string interval ,string grades, string maxScore,string minScore)
+        public IActionResult NewGrading([FromBody] List<CreateGradingDTO> request, int format, string interval ,string grades, string maxScore,string minScore, string rangeGrade, string median, string llf)
         {
             List<CreateGradingViewModel> NewdtoList = new List<CreateGradingViewModel>();
             List<GradingViewModel> grading = new List<GradingViewModel>();
@@ -75,11 +77,32 @@ namespace Plexus.API.Controllers.PortalControllers
                 };
                 NewdtoList.Add(dto);
             }
-            if (format == 5 || format == 3 || format == 1)
+            if (format == 5 || format == 3 || format == 1 || format == 2 || format == 4)
             {
-                 grading = _gradingManager.NewGrading(NewdtoList, format, interval , grades, maxScore,minScore, Guid.Empty);
+                 grading = _gradingManager.NewGrading(NewdtoList, format, interval , grades, maxScore, minScore, rangeGrade, median, llf, Guid.Empty);
             }
             return StatusCode(201, ResponseWrapper.Success(HttpStatusCode.OK, grading));
         }
+
+        [HttpPost("Median")]
+        public IActionResult GetMedian([FromBody] List<CreateGradingDTO> request)
+        {
+            var count = request.Count;
+            int mid = count / 2;
+            //คำนวณหาค่า Median 
+            var newList = (request.Select(dto => {
+                var finalScore = Convert.ToDecimal(dto.finalExam);
+                return new CreateTotalScoreViewModel
+                {
+                    totalScore = finalScore
+                };
+            })).OrderByDescending(o => o.totalScore).ToList();
+            //get the median
+            var medianScore = newList.ElementAt(mid);
+
+            return StatusCode(201, ResponseWrapper.Success(HttpStatusCode.OK, medianScore.totalScore.ToString()));
+        }
+
+        
     }
 }

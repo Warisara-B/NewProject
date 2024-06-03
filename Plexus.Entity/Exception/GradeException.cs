@@ -17,6 +17,11 @@ namespace Plexus.Entity.Exception
         {
             public LetterDuplicate(string letter) : base($"Grade with given letter ({letter}) is already exists in system.", HttpStatusCode.Conflict) { }
         }
+
+        public class IncorrectGrade : GradeException
+        {
+            public IncorrectGrade() : base("Incorrect Grade.", HttpStatusCode.Forbidden) { }
+        }
     }
 }
 
